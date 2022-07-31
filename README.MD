@@ -12,7 +12,7 @@
 ## ⭐ Features
 1. Convert json to .env file
 2. Accept up to 4 levels deep of Objects [nested objects]
-- Example:
+- INPUT Json File Example:
     ```json
     {
         // First Level
@@ -36,6 +36,19 @@
         },
         "logLevel": true,
     }
+    ```
+- OUTPUT .Env File Example:
+    ```.env
+    PORT=6666
+    DBURI_HOST="127.0.0.1"
+    DBURI_PORT=666
+    DBURI_DB_NAME="DB_X1"
+    DBURI_DB_USER_NAME="ABC"
+    DBURI_DB_USER_PASSWORD=null
+    DBURI_DB_USER_ROLE="admin"
+    DBURI_DB_USER_NUMBER=789
+    DBURI_DB_PASSWORD=12345678
+    LOGLEVEL=true
     ```
 ## 🆕 Coming Soon
 1. Convert object to .env file
