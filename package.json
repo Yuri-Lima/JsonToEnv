@@ -2,7 +2,7 @@
   "name": "dynamic.envs",
   "version": "0.0.1",
   "description": "Converts json to .env file",
-  "main": "index.js",
+  "main": ".src/index.js",
   "scripts": {
     "build": "tsc ./src/index.ts --require dotenv/config",
     "dev": "ts-node-dev -r tsconfig-paths/register --transpile-only --quiet --clear --respawn ./src/index.ts --require dotenv/config",
