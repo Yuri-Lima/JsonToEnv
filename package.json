@@ -1,6 +1,6 @@
 {
   "name": "dynamic.envs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Converts json to .env file",
   "main": ".src/index.js",
   "scripts": {
@@ -19,6 +19,11 @@
     "dynanic env",
     "dynamic envs ts"
   ],
+  "github": {
+    "repository": "https://github.com/Yuri-Lima/JsonToEnv",
+    "issues": "https://github.com/Yuri-Lima/JsonToEnv/issues",
+    "type": "git"
+  },
   "author": "Yuri Lima",
   "license": "ISC",
   "dependencies": {
