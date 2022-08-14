@@ -56,6 +56,9 @@
 4. Accept nested arrays
 5. Accept nested objects of arrays
 
+## What technology are we using?
+- [TypeScript](https://www.typescriptlang.org/) - Static tye checking 
+
 ## 💪 Motivation
 
 * I used to use those tools below to deal with .env files but I found them to be too boring sometimes annoing then I decided to use JSON instead, because I think they are more flexible, readble and easy to use. However, I was not able to find a way to convert JSON to .env file automatically. So I decided to write a tool to do that. I hope you will like it.
