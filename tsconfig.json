@@ -39,11 +39,12 @@
     "allowJs": true,                                  /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */
     
     /* Emit */
-    "outDir": "./dist/src",                                   /* Specify an output folder for all emitted files. */
+    "outDir": "./dist",                                   /* Specify an output folder for all emitted files. */
     "removeComments": true,                           /* Disable emitting comments. */
     "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
     "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
-
+    "declaration": true, 
+    
     /* Type Checking */
     "strict": true,                                      /* Enable all strict type-checking options. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
@@ -54,9 +55,7 @@
   ],
   "exclude": [
     ".env",
-    "node_modules",
-    "**/*.d.ts",
-    "**/*.spec.ts",
+    "node_modules"
   ],
   // NEW: Options for file/directory watching
   "watchOptions": {
