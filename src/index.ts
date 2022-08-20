@@ -49,7 +49,7 @@ export class JsonToEnv {
     this.options.createNewEnvFile = options.createNewEnvFile;
     this.options.useCache = options.useCache;
     this.options.jsonFile = options.jsonFile || '';
-    this.options.json = options.json || {};
+    this.options.json = options.json;
     this.cache = new Cache();
     /**
      * @description: Make sure the file exists
@@ -61,13 +61,13 @@ export class JsonToEnv {
     if (this.options.useCache) {
       // this.hasChanged();
     }
-    console.log('JsonToEnv: ', this.options.json);
+    this.options.json?console.log('JsonToEnv: ', this.options.json):"";
     this.readFile();
   }
 
   private readFile(): void {
     if (this.options.jsonFile !== '') {
-      console.log('JsonToEnv: ', this.options.jsonFile);
+      console.log('JsonToEnv: ', this.options.json);
       this.options.json = this.options.jsonFile;
       this.options.obj = JSON.parse(this.options.json);
     } else {
@@ -95,7 +95,7 @@ export class JsonToEnv {
      * if not create a sample json file
      * @returns void
      */
-    if (!fs.existsSync(resolve(this.set.filePath))) {
+    if (!fs.existsSync(resolve(this.set.filePath))) { // Check if the file exists
       const extencsion = this.getExtension();
       if (extencsion === 'json') {
         console.log(`Creating sample env.${extencsion} file...\nPath:`, this.set.filePath, '\n');
