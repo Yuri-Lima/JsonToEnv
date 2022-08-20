@@ -1,6 +1,6 @@
 {
   "name": "dynamic.envs",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Converts json to .env file",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -11,6 +11,7 @@
     "build": "node ./dist/src/index.js",
     "tsc": "tsc",
     "dev": "ts-node-dev -r tsconfig-paths/register --transpile-only --quiet --clear --respawn ./src/index.ts --require dotenv/config",
+    "example":"ts-node-dev -r tsconfig-paths/register --transpile-only --quiet --clear --respawn ./src/example.ts",
     "test": "jest -c ./jest.unit.json",
     "test:coverage": "jest --coverage -c ./src/jest.unit.json",
     "test:watch": "jest --watch"
