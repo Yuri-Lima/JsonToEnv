@@ -1,8 +1,6 @@
 import { resolve, join } from 'node:path';
 import fs from 'node:fs';
-import Cache from 'node-cache';
 import simpleJson from './env.json';
-// import { v4 as uuidv4 } from 'uuid';
 
 export interface Set_Env {
     fileName: string;
@@ -11,9 +9,8 @@ export interface Set_Env {
 
 export interface Options_Set_Env {
     test: boolean;
-    updateNewJsonFile: boolean;
-    createNewEnvFile: boolean;
-    useCache: boolean;
+    createJsonFile: boolean;
+    createEnvFile: boolean;
     jsonFile?: any;
     json?: any;
     obj?: any;
@@ -31,26 +28,21 @@ export class JsonToEnv {
 
   public options:Options_Set_Env = {
     test: true,
-    updateNewJsonFile: false,
-    createNewEnvFile: true,
-    useCache: false,
+    createJsonFile: false,
+    createEnvFile: true,
     jsonFile: '',
     json: {},
     obj: {},
   };
 
-  private cache: Cache;
-
   constructor(set: Set_Env, options: Options_Set_Env) {
     this.set.fileName = set.fileName;// 'env.json';
     this.set.filePath = set.filePath;// join(process.cwd(), this.set.fileName);
     this.options.test = options.test;
-    this.options.updateNewJsonFile = options.updateNewJsonFile;
-    this.options.createNewEnvFile = options.createNewEnvFile;
-    this.options.useCache = options.useCache;
+    this.options.createJsonFile = options.createJsonFile;
+    this.options.createEnvFile = options.createEnvFile;
     this.options.jsonFile = options.jsonFile || '';
     this.options.json = options.json;
-    this.cache = new Cache();
     /**
      * @description: Make sure the file exists
      */
@@ -58,16 +50,13 @@ export class JsonToEnv {
       throw new Error('File path or File name was not defined');
     }
     this.verify();
-    if (this.options.useCache) {
-      // this.hasChanged();
-    }
-    this.options.json?console.log('JsonToEnv: ', this.options.json):"";
+    // this.options.json?console.log('JsonToEnv: ', this.options.json):"";
     this.readFile();
   }
 
   private readFile(): void {
     if (this.options.jsonFile !== '') {
-      console.log('JsonToEnv: ', this.options.json);
+      // console.log('JsonToEnv: ', this.options.json);
       this.options.json = this.options.jsonFile;
       this.options.obj = JSON.parse(this.options.json);
     } else {
@@ -107,9 +96,6 @@ export class JsonToEnv {
           flag: 'w',
         });
       }
-      if (this.cache === undefined) {
-        throw new Error('Cache is not defined');
-      }
     }
   }
 
@@ -120,25 +106,8 @@ export class JsonToEnv {
   private getExtension(): string {
     return String(this.set.fileName.split('.').pop());
   }
-
-  /**
-   * @description: This function will read the env.json file and set all of them in cache.
-   * @returns
-   */
-  private setCache(): void {
-    console.log('Setting cache...');
-    this.cache.set(this.set.filePath, this.options.obj, 1000 * 60 * 60 * 24);
-  }
-
-  private hasChanged(): boolean {
-    if (this.cache.get(this.set.filePath) === undefined || this.cache.get(this.set.filePath) === null) {
-      this.setCache();return false;
-    }
-    if (this.cache.get(this.set.filePath) === this.options.obj) {
-      console.log('No changes on .env file');
-      return false;
-    }
-    return true;
+  private getFileName(): string {
+    return String(this.set.fileName.split('.').shift());
   }
 
   /**
@@ -153,12 +122,25 @@ export class JsonToEnv {
     return Math.floor(Math.random() * (max - min) + min);
   }
 
+  private ArrayToStringToJson(arr:any):string {
+    type ConvertToJson = {
+      [key: string]: any
+    };
+    let envJson: ConvertToJson = {};
+      for (const item of arr) {
+        let [key, value]:string[] = item.split('=');
+        value = value.replace(/'/g, '');
+        envJson[key] = value;
+      }
+      // console.log('EnvJson', envJson);
+      return JSON.stringify(envJson, null, 4);
+  }
+
   public setEnv(): void {
     if (!this.options.obj) {
       throw new Error('obj is not defined');
     }
     const env:string[] = [];
-    // console.log(this.options.obj);
     // Zero level
     for (const key in this.options.obj) {
       // First level
@@ -229,27 +211,23 @@ export class JsonToEnv {
     /**
      * @description: If the env.json file has changed, then we need to write the new env.json file
      */
-    if (this.options.updateNewJsonFile) {
+    if (this.options.createJsonFile) {
+      const envJson = this.ArrayToStringToJson(env);
       fs.writeFileSync(
-        `${this.set.filePath}.${this.getRandomInt(1, 100000)}`,
-        JSON.stringify(this.options.obj, null, '\t'),
+        `${join(process.cwd(), `${this.getFileName()+".json"}`)}`,
+        envJson
       );
     }
-    // else{
-    //   fs.writeFileSync(
-    //     `${this.set.filePath}`,
-    //     JSON.stringify(this.options.obj, null, '\t')
-    //   );
-    // }
+    
     /**
      * @description: Write the new .env file
      */
     /**
-     * if createNewEnvFile is true and test is false, then create a new .env file overwriting the old one
-     * if createNewEnvFile is true and test is true, then create a new .env file withouth overwriting the old one
-     * if createNewEnvFile is false, then do not create a new .env file
+     * if createEnvFile is true and test is false, then create a new .env file overwriting the old one
+     * if createEnvFile is true and test is true, then create a new .env file withouth overwriting the old one
+     * if createEnvFile is false, then do not create a new .env file
      */
-    if (this.options.createNewEnvFile) {
+    if (this.options.createEnvFile) {
       if (this.options.test) {// If the test is true, then it will not over write the original .env file
         fs.writeFileSync(
           `.env.${this.getRandomInt(1, 100000)}`,
