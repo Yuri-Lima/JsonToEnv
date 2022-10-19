@@ -1,76 +1,79 @@
 import { resolve, join } from 'node:path';
 import fs from 'node:fs';
-import simpleJson from './env.json';
 
 export interface Set_Env {
     fileName: string;
-    filePath: string;
+    readFileFrom: string;
+    saveFileTo: string;
 }
 
 export interface Options_Set_Env {
-    test: boolean;
+    overWrite_Original_Env: boolean;
     createJsonFile: boolean;
     createEnvFile: boolean;
-    jsonFile?: any;
-    json?: any;
-    obj?: any;
+    log: boolean;
 }
 /**
  * @description: This function will read the env.json file and set the env variables
- * @param {string} filePath - The path of the env.json file
+ * @param {string} readFileFrom - The path of the env.json file
  *
  */
 export class JsonToEnv {
+  private file: any;
+  private obj:any = {};
+  private objectobecomeJson:{} = {};
+  private writeTo:string = '';
+  private sourcePath:string = '';
   public set: Set_Env = {
     fileName: '',
-    filePath: '',
+    readFileFrom: '',
+    saveFileTo: '',
   };
 
+  /**
+   * @description: Default options
+   */
   public options:Options_Set_Env = {
-    test: true,
-    createJsonFile: false,
+    overWrite_Original_Env: false,
+    createJsonFile: true,
     createEnvFile: true,
-    jsonFile: '',
-    json: {},
-    obj: {},
+    log: true,
   };
 
   constructor(set: Set_Env, options: Options_Set_Env) {
-    this.set.fileName = set.fileName;// 'env.json';
-    this.set.filePath = set.filePath;// join(process.cwd(), this.set.fileName);
-    this.options.test = options.test;
+    this.set.fileName = set.fileName;
+    this.set.readFileFrom = set.readFileFrom;
+    this.writeTo = set.saveFileTo;
+    this.options.overWrite_Original_Env = options.overWrite_Original_Env;
     this.options.createJsonFile = options.createJsonFile;
     this.options.createEnvFile = options.createEnvFile;
-    this.options.jsonFile = options.jsonFile || '';
-    this.options.json = options.json;
+    this.options.log = options.log;
+    this.sourcePath = join(this.set.readFileFrom,`${this.getFileName()}.${this.getExtension()}`);
     /**
      * @description: Make sure the file exists
      */
-    if (this.set.filePath === '' || this.set.filePath === undefined || this.set.fileName === '' || this.set.fileName === undefined) {
+    if (this.set.readFileFrom === '' || this.set.readFileFrom === undefined || this.set.fileName === '' || this.set.fileName === undefined) {
       throw new Error('File path or File name was not defined');
     }
-    this.verify();
-    // this.options.json?console.log('JsonToEnv: ', this.options.json):"";
-    this.readFile();
+    /**
+     * @description: Make sure the file exists
+     * if not create a sample json file
+     * @returns void
+     */
+    this.verify(); // Make sure the file exists
+    this.readFile(); // Read the file
   }
 
   private readFile(): void {
-    if (this.options.jsonFile !== '') {
-      // console.log('JsonToEnv: ', this.options.json);
-      this.options.json = this.options.jsonFile;
-      this.options.obj = JSON.parse(this.options.json);
-    } else {
-      const extencsion = this.getExtension();
-      // console.log('extencsion: ', extencsion);
-      if (extencsion === 'json') {
-        this.options.json = fs.readFileSync(resolve(this.set.filePath), 'utf8');
-        this.options.obj = JSON.parse(this.options.json);
-      } else if (extencsion === 'js' || extencsion === 'ts') {
-        const module = require(resolve(this.set.filePath)).default;
-        this.options.json = JSON.stringify(module); // Module is a Object is the default export
-        this.options.obj = module;
-        // console.log('module: ', this.options.obj);
-      }
+    const extencsion = this.getExtension();
+    const path = this.sourcePath;
+    if (extencsion === 'json') {
+      this.file = fs.readFileSync(path, 'utf8');
+      this.obj = JSON.parse(this.file);
+    } else if (extencsion === 'js' || extencsion === 'ts') {
+      const module = require(path).default;
+      this.file = JSON.stringify(module); // Module is a Object is the default export
+      this.obj = module;
     }
   }
 
@@ -84,17 +87,28 @@ export class JsonToEnv {
      * if not create a sample json file
      * @returns void
      */
-    if (!fs.existsSync(resolve(this.set.filePath))) { // Check if the file exists
+    const path = this.sourcePath;
+    if (!fs.existsSync(path)) { // Check if the file exists
       const extencsion = this.getExtension();
       if (extencsion === 'json') {
-        console.log(`Creating sample env.${extencsion} file...\nPath:`, this.set.filePath, '\n');
-        fs.writeFileSync(resolve(this.set.filePath), JSON.stringify(simpleJson, null, 4));
+        if(this.options.log) {
+          console.log('File does not exist, creating a sample json file');
+          console.log(`Creating sample env.${extencsion} file...\nPath:`, path, '\n');
+        }
+        fs.writeFileSync(path, JSON.stringify({"test_Json":"ok"}, null, 4));
       } else if (extencsion === 'js' || extencsion === 'ts') {
-        console.log(`Creating sample env.${extencsion} file...\nPath:`, this.set.filePath, '\n');
-        fs.writeFileSync(resolve(this.set.filePath), `export default ${JSON.stringify(simpleJson, null, '\t')}`, {
+        if(this.options.log) {
+          console.log(`File does not exist, creating a sample ${extencsion} file`);
+          console.log(`Creating sample env.${extencsion} file...\nPath:`, path, '\n');
+        }
+        fs.writeFileSync(path, `export default ${JSON.stringify({"test":"ok"}, null, '\t')}`, {
           encoding: 'utf8',
           flag: 'w',
         });
+      }
+    } else {
+      if(this.options.log) {
+        console.log('File exists');
       }
     }
   }
@@ -106,6 +120,10 @@ export class JsonToEnv {
   private getExtension(): string {
     return String(this.set.fileName.split('.').pop());
   }
+  /**
+   * @description: This function will return the file name
+   * @returns string
+   */
   private getFileName(): string {
     return String(this.set.fileName.split('.').shift());
   }
@@ -128,7 +146,8 @@ export class JsonToEnv {
     };
     let envJson: ConvertToJson = {};
       for (const item of arr) {
-        let [key, value]:string[] = item.split('=');
+        // console.log(item.split('=',1));
+        let [key, value]:string[] = item.split('=',2);
         value = value.replace(/'/g, '');
         envJson[key] = value;
       }
@@ -137,73 +156,108 @@ export class JsonToEnv {
   }
 
   public setEnv(): void {
-    if (!this.options.obj) {
+    if (!this.obj) {
       throw new Error('obj is not defined');
     }
+    // console.log('obj: ', this.obj);
     const env:string[] = [];
     // Zero level
-    for (const key in this.options.obj) {
+    for (const key in this.obj) {
       // First level
-      if (this.options.obj[key] instanceof Object) {
-        for (const subKey in this.options.obj[key]) {
+      if (this.obj[key] instanceof Object) {
+        for (const subKey in this.obj[key]) {
           // Second level
-          if (this.options.obj[key][subKey] instanceof Object) {
-            for (const thirdKey in this.options.obj[key][subKey]) {
+          if (this.obj[key][subKey] instanceof Object) {
+            for (const thirdKey in this.obj[key][subKey]) {
               // Third level
-              if (this.options.obj[key][subKey][thirdKey] instanceof Object) {
-                for (const fourthKey in this.options.obj[key][subKey][thirdKey]) {
+              if (this.obj[key][subKey][thirdKey] instanceof Object) {
+                for (const fourthKey in this.obj[key][subKey][thirdKey]) {
                   if (fourthKey === null) {
-                    this.options.obj[key][subKey][thirdKey][fourthKey] = `'NOT DEFINED - The last value was ${fourthKey} - If you want to set this value, please set useNull: true'`;
+                    this.obj[key][subKey][thirdKey][fourthKey] = `'NOT DEFINED - The last value was ${fourthKey} - If you want to set this value, please set useNull: true'`;
+                    // console.log('The last value was null, if you want to set this value, please set useNull: true');
                     // throw new Error(`${key} is not defined`);
                   }
                   if (fourthKey === undefined) {
-                    this.options.obj[key][subKey][thirdKey][fourthKey] = `'NOT DEFINED - The last value was ${fourthKey} - If you want to set this value, please set useUndefined: true'`;
+                    this.obj[key][subKey][thirdKey][fourthKey] = `'NOT DEFINED - The last value was ${fourthKey} - If you want to set this value, please set useUndefined: true'`;
+                    console.log(`${key} is not defined`);
                     // throw new Error(`${key} is not defined`);
                   }
                   // set the env variable
-                  process.env[`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}_${String(fourthKey).toLocaleUpperCase()}`] = this.options.obj[key][subKey][thirdKey][fourthKey];
-                  if (typeof this.options.obj[key][subKey][thirdKey][fourthKey] === 'number'
-                  || typeof this.options.obj[key][subKey][thirdKey][fourthKey] === 'boolean'
-                  || typeof this.options.obj[key][subKey][thirdKey][fourthKey] === 'object' // for null.
+                  process.env[`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}_${String(fourthKey).toLocaleUpperCase()}`] = this.obj[key][subKey][thirdKey][fourthKey];
+                  if (typeof this.obj[key][subKey][thirdKey][fourthKey] === 'number'
+                  || typeof this.obj[key][subKey][thirdKey][fourthKey] === 'boolean'
+                  || typeof this.obj[key][subKey][thirdKey][fourthKey] === 'object' // for null.
                   ) {
-                    env.push(`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}_${String(fourthKey).toLocaleUpperCase()}=${this.options.obj[key][subKey][thirdKey][fourthKey]}`);
+                    this.objectobecomeJson = {
+                      ...this.objectobecomeJson,
+                      [`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}_${String(fourthKey).toLocaleUpperCase()}`]: this.obj[key][subKey][thirdKey][fourthKey],
+                    };
+                    env.push(`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}_${String(fourthKey).toLocaleUpperCase()}=${this.obj[key][subKey][thirdKey][fourthKey]}`);
                   } else {
-                    env.push(`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}_${String(fourthKey).toLocaleUpperCase()}='${this.options.obj[key][subKey][thirdKey][fourthKey]}'`)
+                    this.objectobecomeJson ={
+                      ...this.objectobecomeJson,
+                      [`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}_${String(fourthKey).toLocaleUpperCase()}`]: `${this.obj[key][subKey][thirdKey][fourthKey]}`,
+                    }
+                    env.push(`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}_${String(fourthKey).toLocaleUpperCase()}='${this.obj[key][subKey][thirdKey][fourthKey]}'`)
                   }
                 }
               } else {
                 // set the env variable
-                process.env[`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}`] = this.options.obj[key][subKey][thirdKey];
-                if (typeof this.options.obj[key][subKey][thirdKey] === 'number'
-                  || typeof this.options.obj[key][subKey][thirdKey] === 'boolean'
-                  || typeof this.options.obj[key][subKey][thirdKey] === 'object' // for null.
+                process.env[`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}`] = this.obj[key][subKey][thirdKey];
+                if (typeof this.obj[key][subKey][thirdKey] === 'number'
+                  || typeof this.obj[key][subKey][thirdKey] === 'boolean'
+                  || typeof this.obj[key][subKey][thirdKey] === 'object' // for null.
                 ) {
-                  env.push(`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}=${this.options.obj[key][subKey][thirdKey]}`); 
+                  this.objectobecomeJson = {
+                    ...this.objectobecomeJson,
+                    [`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}`]: this.obj[key][subKey][thirdKey],
+                  };
+                  env.push(`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}=${this.obj[key][subKey][thirdKey]}`); 
                 } else {
-                  env.push(`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}='${this.options.obj[key][subKey][thirdKey]}'`); 
+                  this.objectobecomeJson = {
+                    ...this.objectobecomeJson,
+                    [`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}`]: `${this.obj[key][subKey][thirdKey]}`,
+                  };
+                  env.push(`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}_${String(thirdKey).toLocaleUpperCase()}='${this.obj[key][subKey][thirdKey]}'`);
                 }
               }
             }
           } else {
-            process.env[`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}`] =this.options.obj[key][subKey]; // Set key name plus sub key name
-            if (typeof this.options.obj[key][subKey] === 'number'
-                || typeof this.options.obj[key][subKey] === 'boolean'
-                || typeof this.options.obj[key][subKey] === 'object' // for null.
+            process.env[`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}`] =this.obj[key][subKey]; // Set key name plus sub key name
+            if (typeof this.obj[key][subKey] === 'number'
+                || typeof this.obj[key][subKey] === 'boolean'
+                || typeof this.obj[key][subKey] === 'object' // for null.
             ) {
-              env.push(`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}=${this.options.obj[key][subKey]}`); // Set key name plus sub key name
+              this.objectobecomeJson = {
+                ...this.objectobecomeJson,
+                [`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}`]: this.obj[key][subKey],
+              };
+              env.push(`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}=${this.obj[key][subKey]}`); // Set key name plus sub key name
             } else {
-              env.push(`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}='${this.options.obj[key][subKey]}'`); // Set key name plus sub key name
+              this.objectobecomeJson = {
+                ...this.objectobecomeJson,
+                [`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}`]: `${this.obj[key][subKey]}`,
+              };
+              env.push(`${String(key).toLocaleUpperCase()}_${String(subKey).toLocaleUpperCase()}='${this.obj[key][subKey]}'`); // Set key name plus sub key name
             }
           }
         }
       } else {
-        process.env[String(key).toLocaleUpperCase()] = this.options.obj[key]; // set env variable
-        if (typeof this.options.obj[key] === 'number'
-        || typeof this.options.obj[key] === 'boolean'
-        || typeof this.options.obj[key] === 'object') { // for null.
-          env.push(`${String(key).toLocaleUpperCase()}=${this.options.obj[key]}`);// Push key name and value
+        process.env[String(key).toLocaleUpperCase()] = this.obj[key]; // set env variable
+        if (typeof this.obj[key] === 'number'
+        || typeof this.obj[key] === 'boolean'
+        || typeof this.obj[key] === 'object') { // for null.
+          this.objectobecomeJson = {
+            ...this.objectobecomeJson,
+            [String(key).toLocaleUpperCase()]: this.obj[key],
+          };
+          env.push(`${String(key).toLocaleUpperCase()}=${this.obj[key]}`);// Push key name and value
         } else {
-          env.push(`${String(key).toLocaleUpperCase()}='${this.options.obj[key]}'`);
+          this.objectobecomeJson = {
+            ...this.objectobecomeJson,
+            [String(key).toLocaleUpperCase()]: `${this.obj[key]}`,
+          };
+          env.push(`${String(key).toLocaleUpperCase()}='${this.obj[key]}'`);
         }
       }
     }
@@ -212,10 +266,12 @@ export class JsonToEnv {
      * @description: If the env.json file has changed, then we need to write the new env.json file
      */
     if (this.options.createJsonFile) {
-      const envJson = this.ArrayToStringToJson(env);
+      if(this.options.log) {
+        console.log('Creating env.json file at: ', this.sourcePath);
+      }
       fs.writeFileSync(
-        `${join(process.cwd(), `${this.getFileName()+".json"}`)}`,
-        envJson
+        `${join(process.cwd(), "env.json")}`,
+        JSON.stringify(this.objectobecomeJson, null, 4),
       );
     }
     
@@ -223,19 +279,26 @@ export class JsonToEnv {
      * @description: Write the new .env file
      */
     /**
-     * if createEnvFile is true and test is false, then create a new .env file overwriting the old one
-     * if createEnvFile is true and test is true, then create a new .env file withouth overwriting the old one
+     * if createEnvFile is true and overWrite_Original_Env is true, then create a new .env file overwriting the old one
+     * if createEnvFile is true and overWrite_Original_Env is false, then create a new .env file withouth overwriting the old one
      * if createEnvFile is false, then do not create a new .env file
      */
     if (this.options.createEnvFile) {
-      if (this.options.test) {// If the test is true, then it will not over write the original .env file
+      if (!this.options.overWrite_Original_Env) {// If the test is true, then it will not over write the original .env file
+        const random = this.getRandomInt(1, 100000)
+        if (this.options.log) {
+          console.log(`Creating .env.${random} file at: `, this.writeTo + `/.env.${random}`);
+        }
         fs.writeFileSync(
-          `.env.${this.getRandomInt(1, 100000)}`,
+          `${this.writeTo, `.env.${random}`}`,
           env.join('\n'),
         );
       } else { // If the test is false, then it will over write the original .env file
+        if(this.options.log) {
+          console.log('Creating .env file at: ', this.writeTo + '/.env');
+        }
         fs.writeFileSync(
-          `${resolve(process.cwd(), '.env')}`,
+          `${this.writeTo, '.env'}`,
           env.join('\n'),
         );
       }

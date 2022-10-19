@@ -6,17 +6,18 @@
 </div>
 
 
-# Convert Json to .Env File
-### TypeScript, Node-Cache, DotEnv, TS-Node-Dev
+# Convert Json Or Js Or Ts  to .Env File [Experimental Project]
+### TypeScript, TS-Node-Dev
 
 ## ⭐ Features
-1. Convert json to .env file
+1. Convert json to .env file and save the .env just created into .env.json file also.
 2. Accept up to 4 levels deep of Objects [nested objects]
 - INPUT Json File Example:
     ```json
     {
         // First Level
         "port": 6666,
+        "array": ["a", "b", "c"],
         "dbUri": {
             // Second Level
             "host": "127.0.0.1",
@@ -24,6 +25,7 @@
             "db": {
                 // Third Level
                 "name": "DB_X1",
+                "array_2": ["1", "2", "3"],
                 "user": {
                     // Fourth Level
                     "name": "ABC",
@@ -37,19 +39,45 @@
         "logLevel": true,
     }
     ```
-- OUTPUT .Env File Example:
+- 1.OUTPUT .Env File Example:
     ```.env
     PORT=6666
+    ARRRAY_0='a'
+    ARRRAY_1='b'
+    ARRRAY_2='c'
     DBURI_HOST="127.0.0.1"
     DBURI_PORT=666
     DBURI_DB_NAME="DB_X1"
     DBURI_DB_USER_NAME="ABC"
+    DBURI_DB_ARRAY_2_0='1'
+    DBURI_DB_ARRAY_2_1='2'
+    DBURI_DB_ARRAY_2_2='3'
     DBURI_DB_USER_PASSWORD=null
     DBURI_DB_USER_ROLE="admin"
     DBURI_DB_USER_NUMBER=789
     DBURI_DB_PASSWORD=12345678
     LOGLEVEL=true
     ```
+- 2.OUTPUT .Env File Example:
+    ```.env.json
+    {
+        "PORT":"6666",
+        "ARRRAY_0"='a'
+        "ARRRAY_1"='b'
+        "ARRRAY_2"='c'
+        "DBURI_HOST":"127.0.0.1",
+        "DBURI_PORT":666,
+        "DBURI_DB_NAME":"DB_X1",
+        "DBURI_DB_USER_NAME":"ABC",
+        "DBURI_DB_USER_2_0"='1'
+        "DBURI_DB_USER_2_1"='2'
+        "DBURI_DB_USER_2_2"='3'
+        "DBURI_DB_USER_PASSWORD":null,
+        "DBURI_DB_USER_ROLE":"admin",
+        "DBURI_DB_USER_NUMBER":789,
+        "DBURI_DB_PASSWORD":12345678,
+        "LOGLEVEL":true,
+    }
 ## 🚀 How to use it ?
 
 #### Examples
@@ -60,10 +88,11 @@
 2. Creating a path for the new env file which you may would call `env.[extension you want]`
     * You can use **json, js and ts** _extensions_.*
     ```
-    const fileName = "env.ts";
+    const fileName = "env.json";
     const set:Set_Env = {
         fileName: fileName,
-        filePath: join(process.cwd(), "src", fileName),
+        readFileFrom: join(process.cwd(), "src"),
+        saveFileTo: join(process.cwd()),
     };
     ```
     Important:
@@ -83,18 +112,17 @@
 3. Set all the options
    ```
    const options:Options_Set_Env ={
-        test: true, // If it is false, it will Over write the existing .env file
-        updateNewJsonFile: false, // If you want to create a new json file, set this to true
-        createNewEnvFile: true, // If you want to create a new env file, set this to true
-        useCache: false // If you want to use the cache to compare the previous json file and 
-        // the new json file and then create a new json comparation file [This function is not implemented yet]
+        overWrite_Original_Env: false, // If it is true, it will Over write the existing .env file
+        createJsonFile: false, // If you want to create a new json file, set this to true
+        createEnvFile: true, // If you want to create a new env file, set this to true
+        log: true, // If you want to receive feedbacks/logs, set this to true
     }
     ```
-    If **createNewEnvFile** is true and test is false, then create a new .env file **overwriting** the old one.
+    If **createEnvFile** is true and overWrite_Original_Env is true, then create a new .env file **overwriting** the old one.
 
-    If **createNewEnvFile** is true and test is true, then create a new .env file **withouth overwriting** the old one.
+    If **createEnvFile** is true and overWrite_Original_Env is false, then create a new .env file **withouth overwriting** the old one.
 
-    if **createNewEnvFile** is false, then it **will not create** any new .env file.
+    if **createEnvFile** is false, then it **will not create** any new .env file.
 
 4. Instance the class and call the method
     ```
@@ -108,10 +136,10 @@
 2. TypeScript
 
 ## 🚨 ALERT
-- The interface Options_Set_Env has an important property called `test`.
-- By default this property is set to `true`. For safety reasons.
-- This property once set to `false` will OVER WRITE the ORIGINAL .env file.(depends on the .env path)
-- This is a very important property to set to `true` if you want to keep the original .env file.
+- The interface Options_Set_Env has an important property called `overWrite_Original_Env`.
+- By default this property is set to `false`. For safety reasons.
+- This property once set to `true` will OVER WRITE the ORIGINAL .env file.(depends on the .env path)
+- It's very important to keep set it as `false` if you want to keep the original .env file.
 
 ## ⚠️ WARNING
 1. For while this is a very simple converter.
@@ -121,11 +149,10 @@
 5. It does not check if the json file is empty.
 6. It does not find .env file automatically.[**YET**]
 
-## 🆕 Coming Soon
-1. Convert object to .env file
-3. Convert txt to .env file
-4. Accept nested arrays
-5. Accept nested objects of arrays
+## 🆕 Features Coming Soon
+- [x] Accept nested arrays.
+- [ ] Accept nested objects of arrays.
+- [ ] Find .env file automatically.
 
 ## 🤓 What technology are we using?
 - [TypeScript](https://www.typescriptlang.org/) - Static tye checking 
@@ -136,6 +163,15 @@
 
     - [dotenv](https://www.npmjs.com/package/dotenv)
     - [config](https://www.npmjs.com/package/config)
+
+## 📝 Progress Table [I will fill that up soon]
+| Task           | Time required | Assigned to   | Current Status | Finished | 
+|----------------|---------------|---------------|----------------|----------|
+| Comming soon   | > 5 hours     |               | in progress    | [x] Test   
+| Comming soon   | > 5 hours     |               | in progress    | [x] Test1<br/>[ ] Test2
+| Comming soon   | > 5 hours     |               | in progress    | [x] Test1<br/>[ ] Test2
+| Comming soon   | > 5 hours     |               | in progress    | [x] Test1<br/>[ ] Test2
+
 
 If you love this project, please consider giving me a ⭐.
 

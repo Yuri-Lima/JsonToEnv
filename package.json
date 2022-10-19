@@ -1,6 +1,6 @@
 {
   "name": "dynamic.envs",
-  "version": "0.0.6",
+  "version": "0.0.14",
   "description": "Converts json to .env file",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
