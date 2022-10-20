@@ -1,4 +1,4 @@
-import { resolve, join } from 'node:path';
+import { join } from 'node:path';
 import fs from 'node:fs';
 
 export interface Set_Env {
