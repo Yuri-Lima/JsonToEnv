@@ -180,4 +180,4 @@ If you love this project, please consider giving me a ⭐.
 
 ### Issues Page
 
-- You can discuss or ask for help in [issues](https://github.com/Yuri-Lima/Json_TO_Env/issues).
+- You can discuss or ask for help in [issues](https://github.com/Yuri-Lima/JsonToEnv/issues).
