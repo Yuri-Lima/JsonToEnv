@@ -30,6 +30,10 @@
     "issues": "https://github.com/Yuri-Lima/JsonToEnv/issues",
     "type": "git"
   },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Yuri-Lima/JsonToEnv.git"
+  },
   "author": "Yuri Lima",
   "license": "ISC",
   "dependencies": {
