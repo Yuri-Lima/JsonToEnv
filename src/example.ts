@@ -13,8 +13,8 @@ import { JsonToEnv, Set_Env, Options_Set_Env } from "./index";
   const fileName = 'envTree.json';
   const set:Set_Env = {
     fileName: fileName,
-    readFileFrom: join(process.cwd(), 'src'),
-    saveFileTo: join(process.cwd()),
+    readFileFrom: join(process.cwd()),
+    saveFileTo: join(process.cwd(), "src", fileName),
   };
  
   const options:Options_Set_Env ={

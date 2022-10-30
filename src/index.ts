@@ -52,7 +52,10 @@ export class JsonToEnv {
     /**
      * @description: Make sure the file exists
      */
-    if (this.set.readFileFrom === '' || this.set.readFileFrom === undefined || this.set.fileName === '' || this.set.fileName === undefined) {
+    // if (this.set.readFileFrom === '' || this.set.readFileFrom === undefined || this.set.fileName === '' || this.set.fileName === undefined) {
+    //   throw new Error('File path or File name was not defined');
+    // }
+    if (this.set.readFileFrom in ['', undefined] || this.set.fileName in ['', undefined]) {
       throw new Error('File path or File name was not defined');
     }
     /**

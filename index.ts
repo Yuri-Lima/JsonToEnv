@@ -1,1 +1,1 @@
-export * from '../6.JsonToEnv/src/index';
+export * from '../JsonToEnv/src/index';

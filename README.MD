@@ -6,12 +6,15 @@
 </div>
 
 
-# Convert Json Or Js Or Ts  to .Env File [Experimental Project]
+# Convert Json to .Env File [Experimental Project]
 ### TypeScript, TS-Node-Dev
 
 ## ⭐ Features
-1. Convert json to .env file and save the .env just created into .env.json file also.
-2. Accept up to 4 levels deep of Objects [nested objects]
+1. Convert json to .env file.
+2. Create env.json file optionally.
+3. Overwrite existing .env file optionally.
+4. Instantes log messages to show the progress of the process, optionally.
+5. Accept up to 4 levels deep of Objects [nested objects]
 - INPUT Json File Example:
     ```json
     {
@@ -39,8 +42,8 @@
         "logLevel": true,
     }
     ```
-- 1.OUTPUT .Env File Example:
-    ```.env
+- 1.OUTPUT .Env File Example [Overwrite][optional]:
+    ```env
     PORT=6666
     ARRRAY_0='a'
     ARRRAY_1='b'
@@ -58,8 +61,8 @@
     DBURI_DB_PASSWORD=12345678
     LOGLEVEL=true
     ```
-- 2.OUTPUT .Env File Example:
-    ```.env.json
+- 2.OUTPUT env.json File Example [Optional][optional]:
+    ```json
     {
         "PORT":"6666",
         "ARRRAY_0"='a'
@@ -96,7 +99,7 @@
     };
     ```
     Important:
-    * You can use **json, js and ts** _extensions_.
+    * You can use **json** _extensions_.
         For js and ts extensions you must use the default export js or ts way.:
         - Example:
             ```

@@ -1,0 +1,163 @@
+
+{
+    "port": 9000,
+    "cookie":{ 
+        "secret": "ya29.a0ARrdaM-qgvEDl-zy3uEaEUoQU9JubKVMla6YJQMiD_XCc4viHSwI2i"
+    },
+    "amqp":{
+        "protocol": "amqp",
+        "url": "amqps://vveogqbp:90TAr6kYS-_cOFNVdrC157sICjdq0SKq@jackal.rmq.cloudamqp.com/vveogqbp",
+        "hostname": "localhost",
+        "port": 5672,
+        "username": "yurilima",
+        "password": "Laura2020",
+        "vhost": "/yurilima"
+    },
+    "node":{
+        "env": "production",
+        "host": "localhost",
+        "protocol": "http",
+        "env_dev_port": 9000,
+        "env_prod_port": 9000
+    },
+    "db": {
+        "database_sql": "sql_innova",
+        "username_sql": "sql_innova",
+        "password_sql": "75hWXNetcphLjJ8M",
+        "host_sql": "65.108.140.167",
+        "port_sql": 3306,
+        "dialect_sql": "mysql",
+        "force_sql": true,
+        "cacert_sql_path": "/ssl_ca/cacert.pem",
+        "tblPrefix": "tblUatiz",
+        "tblwebhook": "Webhooks",
+        "tblapi": "Api"
+    },
+    "redis": {
+        "host": "127.0.0.1",
+        "port": 6379,
+        "db": 5
+    },
+    "integration":{
+        "type": ["WOO","UATIZ_CHATBOT","WOO_CAMPAIGN"]
+    },
+    "EXCHANGENAME": "uatiz",
+    "EXCHANGETYPE": "topic",
+    "woo":{
+        "credentials": {
+            "url_prod": "https://innovacestas.com.br/",
+            "consumer_key_prod": "ck_ed1767fd91ea0b398ec4fccbfec45ff7263c4e8e",
+            "consumer_secret_prod": "cs_6fd93cfc8e84a5bfdb2680e374e6cd7fb80b6d34",
+            "version": "wc/v3",
+            "secrety":{
+                "oc": "",
+                "ou": ""
+            },
+            "timeout": 30000,
+            "per_page": 100,
+            "wpapi": true,
+            "webhook": {
+                "topic": "order.created",
+                "secret": "whsec_1b0b1c0b1c0b1c0b1c0b1c0b1c0b1c0b1c0b1c0b"
+            }
+        },
+        "exchangeroute_oc": "uatiz.prod.client.woo.innovacestas.OC",
+        "queuename_oc": "innovaCestas_OC",
+        "exchangeroute_ou": "uatiz.prod.client.woo.innovacestas.OU",
+        "queuename_ou": "innovaCestas_OU",
+        "exchangeroute_chatbot": "",
+        "queuename_chatbot": "",
+        "exchangeroute_campaign": "uatiz.prod.client.woo.innovacestas.campaign",
+        "queuename_campaign": "innovaCestas_Campaign",
+        "exchangeroute_tasks": "uatiz.prod.client.woo.innovacestas.tasks",
+        "queuename_tasks": "innovaCestas_Tasks",
+        "exchangeroute_destination": "uatiz.prod.client.woo.innovacestas.DEST",
+        "queuename_destination": "innovaCestas_Dest",
+        "task":[
+            "WOO_TASK_0",
+            "WOO_TASK_1",
+            "WOO_TASK_2",
+            "WOO_TASK_3",
+            "WOO_TASK_4",
+            "WOO_TASK_5",
+            "WOO_TASK_6"
+        ],
+        "dev": {
+            "sheet": {
+                "id": "1JQRMVUnr9lgDI-xMMLrSOOVmaxhd447kQAv_q9YF47s"
+            },
+            "spreadsheets": ["innova_flores"]
+        },
+        "prod": {
+            "sheet": {
+                "id": "1JQRMVUnr9lgDI-xMMLrSOOVmaxhd447kQAv_q9YF47s"
+            },
+            "spreadsheets": ["innova_flores"]
+        },
+        "node_cache":{
+            "ttl": 300,
+            "ttl_main_process": 345600
+        },
+        "cashback":{
+            "url": "https://innovacestas.com.br/?cash_back=",
+            "cashback": 0.05,
+            "cashback_max": 100,
+            "cashback_min": 10
+        }
+    },
+    "fluentCRM":{
+        "exchangeroute": "",
+        "queuename": "",
+        "dev_sheet": "",
+        "prod_sheet": "",
+        "node_cache":{
+            "ttl": 300,
+            "ttl_main_process": 345600
+        }
+    },
+    "uatiz":{
+        "exchangeroute": "",
+        "queuename": "",
+        "exchangeroute_chatbot": "",
+        "queuename_chatbot": "",
+        "dev_sheet": "",
+        "prod_sheet_id": "1Whyia8gLTRjWlU7_zYmWPk2gkeeeYxkXE0DmN4ydLk4",
+        "node_cache":{
+            "ttl": 300,
+            "ttl_main_process": 345600
+        },
+        "internal_notifications_route": "sendtext"
+    },
+    "baseurl": "yurilima.com.br",
+    "subdomain": "innova",
+    "fulldomain": "https://innova.yurilima.com.br",
+    "localhost": "127.0.0.1",
+    "fetch": {
+        "url": "https://uatiz.yurilima.com.br",
+        "timeout": 30000,
+        "retry": 3,
+        "retryDelay": 1000
+    },
+    "api":{
+        "version": "api/v1"
+    },
+    "pm2":{
+        "name":"innova",
+        "name_space":"9000",
+        "instances": 1
+    },
+    "client": {
+        "id": "innova",
+        "name": "Floricultura",
+        "fullName": "Innova Flores e Cestas",
+        "nickName": "Innova",
+        "phoneWork": "554830343339",
+        "phoneTel": "5548988224533",
+        "companyName": "Innova Flores e Cestas",
+        "email": "pedidos@innovacestas.com.br",
+        "address": "Av. Pref. Osmar Cunha, 183 - Centro - Florianopolis / SC. 88115-900",
+        "photo": "",
+        "website": "https://innovacestas.com.br"
+    },
+    "devphone": "353834191605"
+}

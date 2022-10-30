@@ -55,6 +55,7 @@
   ],
   "exclude": [
     ".env",
+    // "**/example.ts",
     "node_modules"
   ],
   // NEW: Options for file/directory watching
