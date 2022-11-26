@@ -11,13 +11,6 @@
     */
     "paths": {
       "@test/*": ["./src/test/*"],                   /* Resolve @test/* to @test/*.ts */
-      // "@controllers/*":["./src/controllers/*"],      /* Resolve @controllers/* to @controllers/*.ts */
-      // "@middleware/*":["./src/middleware/*"],        /* Resolve @middleware/* to @middleware/*.ts */
-      // "@routes/*":["./src/routes/*"],                /* Resolve @routes/* to @routes/*.ts */
-      // "@models/*":["./src/models/*"],                /* Resolve @models/* to @models/*.ts */
-      // "@services/*":["./src/services/*"],            /* Resolve @services/* to @services/*.ts */
-      // "@utils/*":["./src/utils/*"],                  /* Resolve @utils/* to @utils/*.ts */
-      // "@schema/*":["./src/schema/*"],                /* Resolve @schema/* to @schema/*.ts */
     },
     /* Language and Environment */
     "target": "ES2017",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
@@ -55,22 +48,6 @@
   ],
   "exclude": [
     ".env",
-    // "**/example.ts",
     "node_modules"
-  ],
-  // NEW: Options for file/directory watching
-  "watchOptions": {
-    // Use native file system events for files and directories
-    "watchFile": "useFsEvents",
-    "watchDirectory": "useFsEvents",
-    // Poll files for updates more frequently
-    // when they're updated a lot.
-    "fallbackPolling": "dynamicPriority",
-    // Don't coalesce watch notification
-    "synchronousWatchDirectory": true,
-    // Finally, two additional settings for reducing the amount of possible
-    // files to track  work from these directories
-    "excludeDirectories": ["**/node_modules", "_build"],
-    "excludeFiles": ["build/fileWhichChangesOften.ts"]
-  }
+  ]
 }

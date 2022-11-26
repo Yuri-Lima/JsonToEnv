@@ -1,5 +1,5 @@
 
-import { JsonToEnv } from "../index";
+import JsonToEnv from "../index";
 
 export default describe('JsonToEnv', () => {
     it('should be a function', () => {

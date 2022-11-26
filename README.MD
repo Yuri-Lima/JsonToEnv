@@ -1,20 +1,20 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![emoji-log](https://img.shields.io/badge/%F0%9F%9A%80-emoji%20log-gray.svg?colorA=3F3750&colorB=84799D&style=flat)](https://github.com/ahmadawais/Emoji-Log/)
 
+
 <div align="center" width="100%">
-    <img src="./converter.jpg" width="128" alt="" />
+    <img src="./images/converter.jpg" width="128" alt="" />
 </div>
 
 
-# Convert Json to .Env File [Experimental Project]
-### TypeScript, TS-Node-Dev
+# Convert Json to .Env File
 
 ## ⭐ Features
 1. Convert json to .env file.
 2. Create env.json file optionally.
 3. Overwrite existing .env file optionally.
 4. Instantes log messages to show the progress of the process, optionally.
-5. Accept up to 4 levels deep of Objects [nested objects]
+5. Accept up to 5 levels deep of Objects [nested objects]
 - INPUT Json File Example:
     ```json
     {
@@ -33,7 +33,11 @@
                     // Fourth Level
                     "name": "ABC",
                     "password": null,
-                    "role": "admin",
+                    "role": {
+                        // Fifth Level
+                        "name": "ADMIN",
+                        "permissions": ["READ", "WRITE", "DELETE"]
+                    },
                     "number": 789
                 },
                 "password": 12345678
@@ -45,18 +49,19 @@
 - 1.OUTPUT .Env File Example [Overwrite][optional]:
     ```env
     PORT=6666
-    ARRRAY_0='a'
-    ARRRAY_1='b'
-    ARRRAY_2='c'
-    DBURI_HOST="127.0.0.1"
+    ARRAY_0='a'
+    ARRAY_1='b'
+    ARRAY_2='c'
+    DBURI_HOST='127.0.0.1'
     DBURI_PORT=666
-    DBURI_DB_NAME="DB_X1"
-    DBURI_DB_USER_NAME="ABC"
+    DBURI_DB_NAME='DB_X1'
     DBURI_DB_ARRAY_2_0='1'
     DBURI_DB_ARRAY_2_1='2'
     DBURI_DB_ARRAY_2_2='3'
+    DBURI_DB_USER_NAME='ABC'
     DBURI_DB_USER_PASSWORD=null
-    DBURI_DB_USER_ROLE="admin"
+    DBURI_DB_USER_ROLE_NAME='ADMIN'
+    DBURI_DB_USER_ROLE_PERMISSIONS=READ,WRITE,DELETE
     DBURI_DB_USER_NUMBER=789
     DBURI_DB_PASSWORD=12345678
     LOGLEVEL=true
@@ -64,79 +69,86 @@
 - 2.OUTPUT env.json File Example [Optional][optional]:
     ```json
     {
-        "PORT":"6666",
-        "ARRRAY_0"='a'
-        "ARRRAY_1"='b'
-        "ARRRAY_2"='c'
-        "DBURI_HOST":"127.0.0.1",
-        "DBURI_PORT":666,
-        "DBURI_DB_NAME":"DB_X1",
-        "DBURI_DB_USER_NAME":"ABC",
-        "DBURI_DB_USER_2_0"='1'
-        "DBURI_DB_USER_2_1"='2'
-        "DBURI_DB_USER_2_2"='3'
-        "DBURI_DB_USER_PASSWORD":null,
-        "DBURI_DB_USER_ROLE":"admin",
-        "DBURI_DB_USER_NUMBER":789,
-        "DBURI_DB_PASSWORD":12345678,
-        "LOGLEVEL":true,
+    "PORT": 6666,
+    "ARRAY_0": "a",
+    "ARRAY_1": "b",
+    "ARRAY_2": "c",
+    "DBURI_HOST": "127.0.0.1",
+    "DBURI_PORT": 666,
+    "DBURI_DB_NAME": "DB_X1",
+    "DBURI_DB_ARRAY_2_0": "1",
+    "DBURI_DB_ARRAY_2_1": "2",
+    "DBURI_DB_ARRAY_2_2": "3",
+    "DBURI_DB_USER_NAME": "ABC",
+    "DBURI_DB_USER_PASSWORD": null,
+    "DBURI_DB_USER_ROLE_NAME": "'ADMIN'",
+    "DBURI_DB_USER_ROLE_PERMISSIONS": [
+        "READ",
+        "WRITE",
+        "DELETE"
+    ],
+    "DBURI_DB_USER_NUMBER": 789,
+    "DBURI_DB_PASSWORD": 12345678,
+    "LOGLEVEL": true
     }
-## 🚀 How to use it ?
+## Installation
 
-#### Examples
-1. Import the module and interface[optinal]
-   ```
-        import {JsonToEnv, Options_Set_Env, Set_Env} from "dynamic.envs";
-    ```
-2. Creating a path for the new env file which you may would call `env.[extension you want]`
-    * You can use **json, js and ts** _extensions_.*
-    ```
-    const fileName = "env.json";
-    const set:Set_Env = {
-        fileName: fileName,
-        readFileFrom: join(process.cwd(), "src"),
-        saveFileTo: join(process.cwd()),
-    };
-    ```
-    Important:
-    * You can use **json** _extensions_.
-        For js and ts extensions you must use the default export js or ts way.:
-        - Example:
-            ```
-            export default {
-                port: 6666,
-                dbUri: {
-                    host: "123.123.123.123"
-                    port: 666,
-                    }
-                };
-            ```
+```
+npm install --save-dev dynamic.envs
+```
+## 🚀 Getting started
 
-3. Set all the options
-   ```
-   const options:Options_Set_Env ={
-        overWrite_Original_Env: false, // If it is true, it will Over write the existing .env file
-        createJsonFile: false, // If you want to create a new json file, set this to true
-        createEnvFile: true, // If you want to create a new env file, set this to true
-        log: true, // If you want to receive feedbacks/logs, set this to true
-    }
-    ```
-    If **createEnvFile** is true and overWrite_Original_Env is true, then create a new .env file **overwriting** the old one.
+## Setup
 
-    If **createEnvFile** is true and overWrite_Original_Env is false, then create a new .env file **withouth overwriting** the old one.
+### ESM example:
 
-    if **createEnvFile** is false, then it **will not create** any new .env file.
+```js
+import JsonToEnv from "dynamic.envs";
 
-4. Instance the class and call the method
-    ```
-    const setEnv = new JsonToEnv(set, options);
-    setEnv.setEnv();
-    ```
+const api = new JsonToEnv({
+    readFileFrom: path.join(__dirname, "..","FILE_NAME.json"),
+    saveFileTo: path.join(__dirname, "..", ".env")
+  }, {
+    overWrite_Original_Env: true, // if you dont want to overwrite your original .env file, set this to true
+    createJsonFile: true, // If you want to create a new json file, set this to true
+    createEnvFile: true, // If you want to create a new env file, set this to true
+    log: true, // If you want to log the result, set this to true
+  });
+```
 
+### CJS example:
 
-## ⭐ Requirements
-1. NodeJS
-2. TypeScript
+```js
+const JsonToEnv = require("dynamic.envs").default;
+
+const Set = {
+    readFileFrom: path.join(__dirname, "..","FILE_NAME.json"),
+    saveFileTo: path.join(__dirname, "..", ".env")
+  }
+const Options = {
+    overWrite_Original_Env: false, // if you dont want to overwrite your original .env file, set this to true
+    createJsonFile: false, // If you want to create a new json file, set this to true
+    createEnvFile: true, // If you want to create a new env file, set this to true
+    log: false // If you want to log the result, set this to true
+  }
+const api = new JsonToEnv(Set,Options);
+```
+### Setting up Source and Destination
+
+| Option        | Type     | Required | Description                                               |
+|---------------|----------|---------|------------------------------------------------------------|
+| `readFileFrom`| `String` | Yes   | The path to the json file you want to convert to .env file.  |                                                                      
+| `saveFileTo`  | `String` | Yes   | The path to the .env file you want to create.                |  
+
+### Options
+
+| Option                  | Type      | Default | Description                                                                                                         |
+|-------------------------|-----------|---------|---------------------------------------------------------------------------------------------------------------------|
+| `overWrite_Original_Env`| `Boolean` | False   | If True, it will overWrite the orinal .env file                                                                     |
+| `createEnvFile`         | `Boolean` | True    | If True and  overWrite_Original_Env is False is will create a new .env file however if  overWrite_Original_Env is True it will oveWrite the original|
+| `createJsonFile`        | `Boolean` | False   | If True, it will create a new .env.json file                                                                        |
+| `log`                   | `Boolean` | False   | If True, it will log the result to the console                                                                      |
+
 
 ## 🚨 ALERT
 - The interface Options_Set_Env has an important property called `overWrite_Original_Env`.
@@ -166,15 +178,6 @@
 
     - [dotenv](https://www.npmjs.com/package/dotenv)
     - [config](https://www.npmjs.com/package/config)
-
-## 📝 Progress Table [I will fill that up soon]
-| Task           | Time required | Assigned to   | Current Status | Finished | 
-|----------------|---------------|---------------|----------------|----------|
-| Comming soon   | > 5 hours     |               | in progress    | [x] Test   
-| Comming soon   | > 5 hours     |               | in progress    | [x] Test1<br/>[ ] Test2
-| Comming soon   | > 5 hours     |               | in progress    | [x] Test1<br/>[ ] Test2
-| Comming soon   | > 5 hours     |               | in progress    | [x] Test1<br/>[ ] Test2
-
 
 If you love this project, please consider giving me a ⭐.
 
