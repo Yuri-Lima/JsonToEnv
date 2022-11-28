@@ -1,8 +1,7 @@
-import path from 'node:path';
 import fs from 'node:fs';
 import { Set_Env, Options } from './types';
 
-type T = keyof typeof Object;
+type T = keyof typeof Object; // TODO: fix this
 
 /**
  * @description: This function will read the env.json file and set the env variables

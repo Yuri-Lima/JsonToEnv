@@ -10,7 +10,7 @@ import JsonToEnv from "./index";
  * @param {boolean} createEnvFile - If you want to create a new env file, set this to true
  */
 
-  const setEnv = new JsonToEnv({
+  const set = new JsonToEnv({
     readFileFrom: path.join(__dirname, "..","envTree.json"),
     saveFileTo: path.join(__dirname, "..", ".env")
   }, {
@@ -19,4 +19,4 @@ import JsonToEnv from "./index";
     createEnvFile: true, // If you want to create a new env file, set this to true
     log: true, // If you want to log the result, set this to true
   });
-  setEnv.setEnv();
+  set.setEnv();
