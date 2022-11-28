@@ -1,9 +1,9 @@
+[![Updates Test CI](https://github.com/Yuri-Lima/JsonToEnv/actions/workflows/updates.test.yml/badge.svg?branch=main)](https://github.com/Yuri-Lima/JsonToEnv/actions/workflows/updates.test.yml)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![emoji-log](https://img.shields.io/badge/%F0%9F%9A%80-emoji%20log-gray.svg?colorA=3F3750&colorB=84799D&style=flat)](https://github.com/ahmadawais/Emoji-Log/)
 ![npm](https://img.shields.io/npm/v/dynamic.envs)
 ![npm](https://img.shields.io/npm/dt/dynamic.envs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://github.com/Yuri-Lima/dynamic.envs/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/Yuri-Lima/JsonToEnv/blob/main/.github/workflows/updates.test.yml)
 
 <div align="center" width="100%">
     <img src="./images/converter.jpg" width="128" alt="" />
