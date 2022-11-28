@@ -1,6 +1,9 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![emoji-log](https://img.shields.io/badge/%F0%9F%9A%80-emoji%20log-gray.svg?colorA=3F3750&colorB=84799D&style=flat)](https://github.com/ahmadawais/Emoji-Log/)
-
+![npm](https://img.shields.io/npm/v/dynamic.envs)
+![npm](https://img.shields.io/npm/dt/dynamic.envs)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Tests](https://github.com/Yuri-Lima/dynamic.envs/actions/workflows/node.js.yml/badge.svg?branch=main)](https://github.com/Yuri-Lima/JsonToEnv/blob/main/.github/workflows/updates.test.yml)
 
 <div align="center" width="100%">
     <img src="./images/converter.jpg" width="128" alt="" />
@@ -8,6 +11,8 @@
 
 
 # Convert Json to .Env File
+
+Supports for CommonJS (CJS) and ECMAScript (ESM).
 
 ## ⭐ Features
 1. Convert json to .env file.
@@ -105,7 +110,7 @@ npm install --save-dev dynamic.envs
 ```js
 import JsonToEnv from "dynamic.envs";
 
-const api = new JsonToEnv({
+const set = new JsonToEnv({
     readFileFrom: path.join(__dirname, "..","FILE_NAME.json"),
     saveFileTo: path.join(__dirname, "..", ".env")
   }, {
@@ -114,6 +119,7 @@ const api = new JsonToEnv({
     createEnvFile: true, // If you want to create a new env file, set this to true
     log: true, // If you want to log the result, set this to true
   });
+set.setEnv(); // This will create a new .env file depending on the options you set
 ```
 
 ### CJS example:
@@ -131,7 +137,9 @@ const Options = {
     createEnvFile: true, // If you want to create a new env file, set this to true
     log: false // If you want to log the result, set this to true
   }
-const api = new JsonToEnv(Set,Options);
+const sett = new JsonToEnv(Set,Options);
+set.setEnv(); // This will create a new .env file depending on the options you set
+
 ```
 ### Setting up Source and Destination
 
