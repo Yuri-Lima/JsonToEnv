@@ -23,9 +23,10 @@
     "rootDir": "./",                                  /* Specify the root folder within your source files. */
     "moduleResolution": "node",                       /* Specify how TypeScript looks up a file from a given module specifier. */
     "typeRoots": [
-        "./node_modules/@types",
-        "./src/@types"                                              /* Specify a list of folders to be used for type definition files. */
-      ],                                  /* Specify multiple folders that act like './node_modules/@types'. */
+      "./node_modules/@types",
+      "./src/@types",                                              /* Specify a list of folders to be used for type definition files. */
+      "./src/@types/*"
+    ],                                  /* Specify multiple folders that act like './node_modules/@types'. */
     "resolveJsonModule": true,                        /* Enable importing .json files. */
 
     /* JavaScript Support */

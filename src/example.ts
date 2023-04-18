@@ -15,7 +15,7 @@ import JsonToEnv from "./index";
     saveFileTo: path.join(__dirname, "..", ".env")
   }, {
     overWrite_Original_Env: true, // if you dont want to overwrite your original .env file, set this to true
-    createJsonFile: true, // If you want to create a new json file, set this to true
+    createJsonFile: false, // If you want to create a new json file, set this to true
     createEnvFile: true, // If you want to create a new env file, set this to true
     log: true, // If you want to log the result, set this to true
   });

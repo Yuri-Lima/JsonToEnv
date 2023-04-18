@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { Set_Env, Options } from './types';
+import { Set_Env, Options } from './types/types';
 
 type T = keyof typeof Object; // TODO: fix this
 
@@ -240,7 +240,8 @@ export default class JsonToEnv {
      * @description: If the env.json file has changed, then we need to write the new env.json file
      */
     if (this.options.createJsonFile) {
-      const destination = `${this.set.saveFileTo}.json`;
+      const destination = `${this.set.saveFileTo}.EnvJsonCreated.json`;
+
       if(this.options.log) console.log('Creating env.json file at: ', destination);
       
       fs.writeFileSync(
@@ -248,6 +249,12 @@ export default class JsonToEnv {
         JSON.stringify(this.objectobecomeJson, null, 4),
       );
     }
+    // Internal use to generate types definition for process.env
+    const destination = `${__dirname}/.env.DoNotDelete.json`;    
+    fs.writeFileSync(
+      destination,
+      JSON.stringify(this.objectobecomeJson, null, 4),
+    );
     
     /**
      * @description: Write the new .env file
