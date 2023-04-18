@@ -1,6 +1,6 @@
 {
   "name": "dynamic.envs",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Converts json to .env file",
   "author": "Yuri Lima",
   "license": "MIT",
