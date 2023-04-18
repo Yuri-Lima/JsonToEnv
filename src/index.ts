@@ -1,4 +1,15 @@
 import fs from 'node:fs';
+import { infer, input, TypeOf, output } from "zod";
+import envs from './.env.DoNotDelete.json';
+
+type Env = typeof envs;
+/* eslint-disable no-var */
+declare global {
+  namespace NodeJS {
+      interface ProcessEnv extends Env {} // extends process.env
+  }
+}
+
 import { Set_Env, Options } from './types/types';
 
 type T = keyof typeof Object; // TODO: fix this
@@ -250,7 +261,18 @@ export default class JsonToEnv {
       );
     }
     // Internal use to generate types definition for process.env
-    const destination = `${__dirname}/.env.DoNotDelete.json`;    
+    const destination = `${__dirname}/.env.DoNotDelete.json`;
+    //convert the object values to string
+    type ObjectString = {
+      [key: string]: string;
+    }
+    
+    this.objectobecomeJson = Object.keys(this.objectobecomeJson).reduce((acc:ObjectString, key:string) => {
+      // @ts-ignore
+      acc[key] = String(this.objectobecomeJson[key])
+      return acc;
+    }, {});
+    
     fs.writeFileSync(
       destination,
       JSON.stringify(this.objectobecomeJson, null, 4),

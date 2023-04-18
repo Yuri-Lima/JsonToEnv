@@ -45,7 +45,8 @@
   },
   "include": [
     "src/**/*",
-    "test/**/*"
+    "test/**/*",
+    "src/.env.DoNotDelete.json",
   ],
   "exclude": [
     ".env",
