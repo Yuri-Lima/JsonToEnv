@@ -38,7 +38,7 @@
     "save-dev": "^0.0.1-security",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.4",
-    "zod": "^3.21.4"
+    "zod": "^3.22.3"
   },
   "devDependencies": {
     "@semantic-release/git": "^10.0.1",
