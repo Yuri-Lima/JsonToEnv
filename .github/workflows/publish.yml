@@ -1,25 +1,47 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# Os: ubuntu-latest, windows-latest and macos-latest
+# Publishes dynamic.envs with semantic-release.
+# Auth is npm trusted publishing (OIDC) — no NPM_TOKEN.
+# One-time setup: https://www.npmjs.com/package/dynamic.envs/access
+#   Trusted Publisher → GitHub Actions
+#   Organization or user: Yuri-Lima
+#   Repository: JsonToEnv
+#   Workflow filename: publish.yml
+#   Allowed actions: npm publish
 name: Publish NPM CI
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [main]
   workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
   publish:
-   runs-on: ubuntu-latest
-   if: github.ref  == 'refs/heads/main'
-   steps:
-     - uses: actions/checkout@v3
-     - name: Use Node.js ${{ matrix.node-version }}
-       uses: actions/setup-node@v3
-       with:
-         node-version: ${{ matrix.node-version }}
-         cache: 'npm'
-     - run: npm ci
-     - run: npm run semantic-release
-       env:
-         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install npm for trusted publishing
+        run: npm install -g npm@^11.5.1
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
