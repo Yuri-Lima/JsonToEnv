@@ -23,6 +23,7 @@
     "build": "npm run prepack",
     "dev": "ts-node ./src/example.ts",
     "dep:update": "ncu -u",
+    "test": "jest",
     "clean": "rm -rf ./dist",
     "build:types": "npx tsc --emitDeclarationOnly --declaration",
     "build:cjs:esm": "npx tsup ./src/index.ts --format cjs,esm --sourcemap",
@@ -37,7 +38,7 @@
     "save-dev": "^0.0.1-security",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.4",
-    "zod": "^3.21.4"
+    "zod": "^3.25.76"
   },
   "overrides": {
     "js-yaml@3": "3.15.1",
